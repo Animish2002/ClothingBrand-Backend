@@ -13,8 +13,11 @@ app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
+
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with your frontend URL
+}));
 app.use("/api/auth", AuthRouter);
 app.use("/api/products", ProductRouter);
 
