@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
   try {
-    const { name, email, address, pinCode, password } = req.body;
+    const { name, email, address, pinCode, password, role="user" } = req.body;
 
     const user = await User.findOne({ email });
     if (user) {
@@ -13,7 +13,14 @@ const signup = async (req, res) => {
         .json({ message: "User already exists", success: false });
     }
 
-    const userModel = new User({ name, email, address, pinCode, password });
+    const userModel = new User({
+      name,
+      email,
+      address,
+      pinCode,
+      password,
+      role,
+    });
     userModel.password = await bcrypt.hash(password, 10);
     await userModel.save();
 
@@ -44,6 +51,7 @@ const login = async (req, res) => {
       {
         email: user.email,
         userId: user._id,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       {
@@ -52,13 +60,11 @@ const login = async (req, res) => {
     );
 
     res.status(200).json({
-      message: "Login success",
+      message: `Login success ${user.name} for role of ${user.role}`,
       success: true,
       jwtToken,
-      email,
       name: user.name,
     });
-   
   } catch (err) {
     console.error(err); // Log the error to identify the issue
     res.status(500).json({ message: "Internal server error", success: false });

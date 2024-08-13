@@ -5,7 +5,10 @@ const signupValidation = (req, res, next) => {
     name: Joi.string().min(3).max(100).required(),
     email: Joi.string().email().required(),
     address: Joi.string().min(3).max(100).required(),
-    pinCode: Joi.string().min(3).max(100).required(),
+    pinCode: Joi.string().pattern(/^\d{3,10}$/).required()
+      .messages({
+        "string.pattern.base": "Pin code must be a numeric value between 3 and 10 digits.",
+      }),
     password: Joi.string().min(4).max(100).required(),
     confirmPassword: Joi.string()
       .valid(Joi.ref("password"))
@@ -23,8 +26,14 @@ const signupValidation = (req, res, next) => {
       .json({ message: "Bad Request", error: error.details[0].message });
   }
 
+  // Assign default role "user" if not provided
+  if (!req.body.role) {
+    req.body.role = "user";
+  }
+
   next();
 };
+
 
 const loginValidation = (req, res, next) => {
   const schema = Joi.object({
