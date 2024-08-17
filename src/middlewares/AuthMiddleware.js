@@ -4,11 +4,13 @@ const signupValidation = (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().min(3).max(100).required(),
     email: Joi.string().email().required(),
-    address: Joi.string().min(3).max(100).required(),
-    pinCode: Joi.string().pattern(/^\d{3,10}$/).required()
-      .messages({
-        "string.pattern.base": "Pin code must be a numeric value between 3 and 10 digits.",
-      }),
+    address: Joi.object({
+      address1: Joi.string().required(),
+      city: Joi.string(),
+      state: Joi.string(),
+      country: Joi.string(),
+      pinCode: Joi.string().required(),
+    }).required(),
     password: Joi.string().min(4).max(100).required(),
     confirmPassword: Joi.string()
       .valid(Joi.ref("password"))

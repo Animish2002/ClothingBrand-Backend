@@ -13,12 +13,11 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     address: {
-      type: String,
-      required: true,
-    },
-    pinCode: {
-      type: String, // Changed to String to handle potential leading zeros
-      required: true,
+      address1: { type: String, required: true },
+      city: { type: String },
+      state: { type: String },
+      country: { type: String },
+      pinCode: { type: String, required: true },
     },
     password: {
       type: String,

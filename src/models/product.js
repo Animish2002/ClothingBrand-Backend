@@ -1,4 +1,3 @@
-const { ref } = require("joi");
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
@@ -8,9 +7,15 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     productCategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "ProdCategory",
+      categoryName: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      categoryDescription: {
+        type: String,
+        required: true,
+      },
     },
     productQuantity: {
       type: Number,
@@ -31,7 +36,7 @@ const productSchema = new mongoose.Schema(
       enum: ["XS", "S", "M", "L", "XL", "XXL"],
     },
     productImage: {
-      type: String, // URL or file path
+      type: String,
       required: true,
     },
     productColor: {
@@ -45,26 +50,30 @@ const productSchema = new mongoose.Schema(
     },
     productDiscount: {
       type: Number,
-      default: 0, // Default value if not provided
+      default: 0,
       min: 0,
       max: 100,
     },
     seoTitle: {
       type: String,
       required: true,
-      minlength: 10, // Example of a length validator
-      maxlength: 70, // Example of a length validator
+      minlength: 10,
+      maxlength: 70,
     },
     metaDescription: {
       type: String,
       required: true,
-      minlength: 50, // Example of a length validator
-      maxlength: 160, // Example of a length validator
+      minlength: 50,
+      maxlength: 160,
     },
-    status:{
+    status: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
+    createdOn: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );

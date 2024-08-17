@@ -1,21 +1,16 @@
+const {
+  addNewProduct,
+  getALLProducts,
+  getProductById,
+  EditProduct,
+} = require("../controllers/ProductController");
 const { ensureAuth } = require("../middlewares/Auth");
 
 const router = require("express").Router();
 
-router.get("/", ensureAuth, (req,res)=>{
-    res.status(200).json(
-        [
-            {
-                name: "shirt1",
-                price: 400
-            },
-            {
-                name: "shirt2",
-                price: 500
-            }
-        ]
-    )
-});
-
+router.post("/addProduct", ensureAuth, addNewProduct);
+router.get("/allProducts", getALLProducts);
+router.get("/products/:id", getProductById);
+router.put("/editProduct/:id", ensureAuth, EditProduct);
 
 module.exports = router;
