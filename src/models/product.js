@@ -10,7 +10,6 @@ const productSchema = new mongoose.Schema(
       categoryName: {
         type: String,
         required: true,
-        unique: true,
       },
       categoryDescription: {
         type: String,
@@ -36,7 +35,7 @@ const productSchema = new mongoose.Schema(
       enum: ["XS", "S", "M", "L", "XL", "XXL"],
     },
     productImage: {
-      type: String,
+      type: String, // URL or file path
       required: true,
     },
     productColor: {
@@ -50,21 +49,21 @@ const productSchema = new mongoose.Schema(
     },
     productDiscount: {
       type: Number,
-      default: 0,
+      default: 0, // Default value if not provided
       min: 0,
       max: 100,
     },
     seoTitle: {
       type: String,
       required: true,
-      minlength: 10,
-      maxlength: 70,
+      minlength: 10, // Example of a length validator
+      maxlength: 70, // Example of a length validator
     },
     metaDescription: {
       type: String,
       required: true,
-      minlength: 50,
-      maxlength: 160,
+      minlength: 50, // Example of a length validator
+      maxlength: 160, // Example of a length validator
     },
     status: {
       type: Boolean,
