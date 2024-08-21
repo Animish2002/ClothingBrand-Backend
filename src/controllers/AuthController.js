@@ -66,7 +66,6 @@ const login = async (req, res) => {
       maxAge: 3600000, // 1 hour expiration
     });
 
-    
     res.status(200).json({
       message: `Login success ${user.name} for role of ${user.role}`,
       success: true,
