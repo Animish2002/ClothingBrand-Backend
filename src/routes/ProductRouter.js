@@ -5,11 +5,18 @@ const {
   EditProduct,
 } = require("../controllers/ProductController");
 const { ensureAuth } = require("../middlewares/Auth");
+const upload = require("../middlewares/FileUploadMiddleware");
 const { productValidation } = require("../middlewares/ProductAuth");
 
 const router = require("express").Router();
 
-router.post("/addProduct", ensureAuth, productValidation, addNewProduct);
+router.post(
+  "/addProduct",
+  ensureAuth,
+  upload.array("productImage", 5),
+  productValidation,
+  addNewProduct
+);
 router.get("/allProducts", getALLProducts);
 router.get("/products/:id", getProductById);
 router.put("/editProduct/:id", ensureAuth, productValidation, EditProduct);

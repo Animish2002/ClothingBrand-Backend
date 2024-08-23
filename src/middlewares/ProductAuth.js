@@ -16,8 +16,9 @@ const productValidation = (req, res, next) => {
     productQuantity: Joi.number().min(0).required(),
     productMaterial: Joi.string().min(4).max(100).required(),
     productDescription: Joi.string().min(4).max(100).required(),
-    productSize: Joi.string().valid("XS", "S", "M", "L", "XL", "XXL").required(),
-    productImage: Joi.string().uri().required(),
+    productSize: Joi.string()
+      .valid("XS", "S", "M", "L", "XL", "XXL")
+      .required(),
     productColor: Joi.string().min(3).max(50).required(),
     productPrice: Joi.number().min(0).required(),
     productDiscount: Joi.number().min(0).max(100).default(0),

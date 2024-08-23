@@ -1,5 +1,7 @@
 const Product = require("../models/product.js");
+const { url } = require("../utils/cloudinary.js");
 
+// Controller for adding a new product
 const addNewProduct = async (req, res) => {
   try {
     const {
@@ -9,16 +11,21 @@ const addNewProduct = async (req, res) => {
       productMaterial,
       productDescription,
       productSize,
-      productImage,
       productColor,
       productPrice,
       productDiscount,
       seoTitle,
       metaDescription,
       status,
-      createdOn,
     } = req.body;
 
+    // Handle product images uploaded through Cloudinary
+    const productImage = req.files.map((file) => ({
+      url: file.path,
+      public_id: file.filename,
+    }));
+
+    // Check if the product already exists
     const productExists = await Product.findOne({ productName });
     if (productExists) {
       return res
@@ -26,6 +33,7 @@ const addNewProduct = async (req, res) => {
         .json({ message: "Product already exists", success: false });
     }
 
+    // Create a new product document in MongoDB
     const newProduct = new Product({
       productName,
       productCategory,
@@ -43,6 +51,7 @@ const addNewProduct = async (req, res) => {
       createdOn: Date.now(),
     });
 
+    // Save the product to MongoDB
     const saveProduct = await newProduct.save();
 
     return res.status(201).json({

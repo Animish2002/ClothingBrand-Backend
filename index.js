@@ -7,6 +7,7 @@ const AuthRouter = require("./src/routes/AuthRouter.js");
 const ProductRouter = require("./src/routes/ProductRouter.js");
 const CategoryRouter = require("./src/routes/ProductCategory.js");
 const AdminRoutes = require("./src/routes/AdminRoutes.js");
+const UploadFile = require("./src/routes/UploadFile.js");
 
 
 require("dotenv").config();
@@ -28,6 +29,7 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/products", ProductRouter);
 app.use("/api/products/category", CategoryRouter);
 app.use("/api", AdminRoutes);
+app.use("/api/imageUpload", UploadFile);
 
 
 

@@ -34,10 +34,18 @@ const productSchema = new mongoose.Schema(
       required: true,
       enum: ["XS", "S", "M", "L", "XL", "XXL"],
     },
-    productImage: {
-      type: String, // URL or file path
-      required: true,
-    },
+    productImage: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        public_id: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     productColor: {
       type: String,
       required: true,
