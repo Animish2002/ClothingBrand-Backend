@@ -1,1 +1,4 @@
 FOdnFqp7ydw64WgJ
+
+git rm --cached -r to remove tracked folder from github
+git rm --cached filename to to remove tracked file from github

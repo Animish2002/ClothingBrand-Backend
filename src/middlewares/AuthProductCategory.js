@@ -11,7 +11,7 @@ const productCategoryValidation = (req, res, next) => {
   // Validate the request body using Joi
   const schema = Joi.object({
     categoryName: Joi.string().min(4).max(100).required(),
-    categoryDescription: Joi.string().min(4).max(455).required(), // Fixed typo
+    categoryDescription: Joi.string().min(4).max(500).required(), // Fixed typo
   });
 
   const { error } = schema.validate(req.body);
@@ -24,7 +24,5 @@ const productCategoryValidation = (req, res, next) => {
   // Proceed to the next middleware/controller if validation is successful
   next();
 };
-
-
 
 module.exports = { productCategoryValidation };
