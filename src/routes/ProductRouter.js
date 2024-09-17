@@ -11,7 +11,7 @@ const { productValidation } = require("../middlewares/ProductAuth");
 const router = require("express").Router();
 
 router.post(
-  "/addProduct",
+  "/add-product",
   ensureAuth,
   upload.array("productImage", 5),
   productValidation,

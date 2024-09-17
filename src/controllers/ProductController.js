@@ -1,7 +1,7 @@
 const Product = require("../models/product.js");
-const { url } = require("../utils/cloudinary.js");
+const cloudinary = require("../utils/cloudinary.js");
+const fs = require("fs").promises;
 
-// Controller for adding a new product
 const addNewProduct = async (req, res) => {
   try {
     const {
@@ -19,18 +19,39 @@ const addNewProduct = async (req, res) => {
       status,
     } = req.body;
 
-    // Handle product images uploaded through Cloudinary
-    const productImage = req.files.map((file) => ({
-      url: file.path,
-      public_id: file.filename,
-    }));
-
     // Check if the product already exists
     const productExists = await Product.findOne({ productName });
     if (productExists) {
       return res
         .status(409)
         .json({ message: "Product already exists", success: false });
+    }
+
+    // Handle product images uploaded through Cloudinary
+    const productImage = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        try {
+          console.log("Uploading file:", file.path);
+          const result = await cloudinary.uploader.upload(file.path);
+          console.log("Cloudinary result:", result); // Log the Cloudinary response
+          productImage.push({
+            url: result.secure_url,
+            public_id: result.public_id,
+          });
+        } catch (uploadError) {
+          console.error("Error uploading to Cloudinary:", uploadError);
+        } finally {
+          // Remove the file from the server after upload attempt
+          await fs.unlink(file.path);
+        }
+      }
+    }
+
+    if (req.files) {
+      console.log("Files received:", req.files);
+    } else {
+      console.log("No files received");
     }
 
     // Create a new product document in MongoDB
@@ -52,12 +73,12 @@ const addNewProduct = async (req, res) => {
     });
 
     // Save the product to MongoDB
-    const saveProduct = await newProduct.save();
+    const savedProduct = await newProduct.save();
 
     return res.status(201).json({
       message: "Product added successfully",
       success: true,
-      data: saveProduct,
+      data: savedProduct,
     });
   } catch (error) {
     console.error("Error adding product:", error);

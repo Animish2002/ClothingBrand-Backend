@@ -1,36 +1,37 @@
-// middleware/uploadMiddleware.js
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-// Set up storage engine
+// Ensure upload directory exists
+const uploadDir = path.join(__dirname, "../uploads/");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        // Ensure the correct path within your project structure
-        cb(null, path.join(__dirname, '..', 'upload', 'images'));
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
 });
 
-// File filter to allow only image files
-const fileFilter = (req, file, cb) => {
-    const allowedFileTypes = /jpeg|jpg|png|gif/;
-    const extname = allowedFileTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedFileTypes.test(file.mimetype);
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|gif/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
 
     if (mimetype && extname) {
-        return cb(null, true);
+      return cb(null, true);
     } else {
-        cb('Error: Images Only!');
+      cb(new Error("Only image files are allowed!"));
     }
-};
-
-// Initialize multer with the storage and file filter
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 5 }, // 5 MB limit
-    fileFilter: fileFilter
+  },
+  limits: { fileSize: 5 * 1024 * 1024 } // 5 MB limit
 });
 
 module.exports = upload;

@@ -71,7 +71,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 50, // Example of a length validator
-      maxlength: 160, // Example of a length validator
+      maxlength: 500, // Example of a length validator
     },
     status: {
       type: Boolean,
