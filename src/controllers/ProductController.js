@@ -1,5 +1,5 @@
 const Product = require("../models/product.js");
-const cloudinary = require("../utils/cloudinary.js");
+const cloudinary = require("../config/cloudinary.js");
 const fs = require("fs").promises;
 
 const addNewProduct = async (req, res) => {
@@ -32,9 +32,7 @@ const addNewProduct = async (req, res) => {
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
         try {
-          console.log("Uploading file:", file.path);
           const result = await cloudinary.uploader.upload(file.path);
-          console.log("Cloudinary result:", result); // Log the Cloudinary response
           productImage.push({
             url: result.secure_url,
             public_id: result.public_id,
@@ -46,12 +44,8 @@ const addNewProduct = async (req, res) => {
           await fs.unlink(file.path);
         }
       }
-    }
-
-    if (req.files) {
-      console.log("Files received:", req.files);
     } else {
-      console.log("No files received");
+      console.log("No files were uploaded");
     }
 
     // Create a new product document in MongoDB
@@ -62,7 +56,7 @@ const addNewProduct = async (req, res) => {
       productMaterial,
       productDescription,
       productSize,
-      productImage,
+      productImage, // Save the array of image objects
       productColor,
       productPrice,
       productDiscount,

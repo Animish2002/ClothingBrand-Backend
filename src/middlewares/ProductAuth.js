@@ -26,6 +26,12 @@ const productValidation = (req, res, next) => {
     metaDescription: Joi.string().min(50).max(500).required(),
     status: Joi.boolean().default(true),
     productImage: Joi.string().optional(), // Allow the productImage field
+    // productImage: Joi.array().items(
+    //   Joi.object({
+    //     url: Joi.string().uri().required(),
+    //     public_id: Joi.string().required(),
+    //   })
+    // ).optional() // Allows productImage to be an array of objects or not present
   });
 
   const { error } = schema.validate(req.body);

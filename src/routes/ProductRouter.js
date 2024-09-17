@@ -13,7 +13,7 @@ const router = require("express").Router();
 router.post(
   "/add-product",
   ensureAuth,
-  upload.array("productImage", 5),
+  upload.array("productImage", 4),
   productValidation,
   addNewProduct
 );

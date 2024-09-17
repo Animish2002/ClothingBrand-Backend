@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const app = express();
 const bodyParser = require("body-parser");
@@ -8,7 +9,6 @@ const ProductRouter = require("./src/routes/ProductRouter.js");
 const CategoryRouter = require("./src/routes/ProductCategory.js");
 const AdminRoutes = require("./src/routes/AdminRoutes.js");
 
-require("dotenv").config();
 require("./src/models/db.js");
 const PORT = process.env.PORT || 8080;
 
